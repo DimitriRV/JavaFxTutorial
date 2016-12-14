@@ -2,6 +2,8 @@ package main;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -14,6 +16,13 @@ public class Controller extends Application {
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 	
+	private ObservableList<person.Model> personData;
+	
+	
+	
+	public Controller() {
+	}
+
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
@@ -54,22 +63,18 @@ public class Controller extends Application {
 	
 	public void showPersonOverview()
 	{
-		try {
-			//Load person overview
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Controller.class.getResource("../person/View.fxml"));
-			AnchorPane personOverview = (AnchorPane) loader.load();
-			
-			rootLayout.setCenter(personOverview);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		person.Controller controller = new person.Controller();
+		controller.initLayout();
+		AnchorPane personOverview = controller.getAnchorPane();
+		rootLayout.setCenter(personOverview);
+		personData = controller.getPersonData();
 	}
 
 	public Stage getPrimaryStage() {
 		return primaryStage;
+	}
+
+	public ObservableList<person.Model> getPersonData() {
+		return personData;
 	}
 }
