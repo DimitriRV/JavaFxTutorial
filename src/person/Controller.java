@@ -2,18 +2,23 @@ package person;
 
 import java.io.IOException;
 
+//import javafx.beans.value.ChangeListener;
+//import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
+//import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
+//import javafx.util.Callback;
+import util.DateTimeUtil;
 
 public class Controller {
 	
-	private ObservableList<person.Model> personData = FXCollections.observableArrayList();
+	private ObservableList<Model> personData = FXCollections.observableArrayList();
 	
 	@FXML
 	private TableView<Model> personTable;
@@ -49,11 +54,44 @@ public class Controller {
 		// TODO Auto-generated constructor stub
 	}
 	
+	
 	@FXML
 	private void initialize()
 	{
+		/**
+		 * old style without Lambdas
+		 */
+//		firstNameColumn.setCellValueFactory(new Callback<CellDataFeatures<Model, String>, ObservableValue<String>>() {
+//	     public ObservableValue<String> call(CellDataFeatures<Model, String> p) {
+//	         // p.getValue() returns the Person instance for a particular TableView row
+//	         return p.getValue().firstNameProperty();
+//	     }
+//	  });
+		
+		/**
+		 * new style with Lambdas (better to read)
+		 */
 		firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
+		
 		lastNameColumn.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+		showPersonDetails(null);
+		
+		/**
+		 * add Listener function to selectionModel selectedItemProperty. if change show it
+		 * new style with Lambdas
+		 */
+		personTable.getSelectionModel().selectedItemProperty().addListener((observable,oldV,newV) -> showPersonDetails(newV));
+		
+		/**
+		 * old style without Lambdas
+		 */
+//		personTable.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Model>() {
+//			@Override
+//			public void changed(ObservableValue<? extends Model> observable, Model oldValue, Model newValue) {
+//				// TODO Auto-generated method stub
+//				showPersonDetails(newValue);
+//			}
+//		});
 		
 		personData.add(new person.Model("Hans","Muster"));
 		personData.add(new person.Model("Ruth","Mueller"));
@@ -64,6 +102,7 @@ public class Controller {
 		personData.add(new person.Model("Anna","Best"));
 		personData.add(new person.Model("Stefan","Meier"));
 		personData.add(new person.Model("Martin","Mueller"));
+		
 		personTable.setItems(personData);
 	}
 
@@ -92,4 +131,29 @@ public class Controller {
 	public void setPersonData(ObservableList<person.Model> personData) {
 		this.personData = personData;
 	}
+	
+	private void showPersonDetails(Model person)
+	{
+		if(person != null)
+		{
+			firstNameLabel.setText(person.getFirstName());
+      lastNameLabel.setText(person.getLastName());
+      streetLabel.setText(person.getStreet());
+      postalCodeLabel.setText(Integer.toString(person.getPostalCode()));
+      cityLabel.setText(person.getCity());
+      
+      // TODO: We need a way to convert the birthday into a String! 
+       birthdayLabel.setText(DateTimeUtil.format(person.getBirthday()));
+		}
+		else
+		{
+			firstNameLabel.setText("");
+      lastNameLabel.setText("");
+      streetLabel.setText("");
+      postalCodeLabel.setText("");
+      cityLabel.setText("");
+      birthdayLabel.setText("");
+		}
+	}
+	
 }
