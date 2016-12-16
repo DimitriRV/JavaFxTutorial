@@ -12,6 +12,9 @@ import javafx.stage.Stage;
 
 public class Controller extends Application {
 	//TUTORIAL FROM  http://code.makery.ch/library/javafx-8-tutorial/part1/
+	//beachte sehr wichtig!
+	//http://stackoverflow.com/questions/32075725/javafx-trying-to-instantiate-a-stage-inside-a-controller-does-not-retreive-valu
+	//->The instance of ControllerA on which you invoke create_ConfigStage() is created by the line
 	
 	private Stage primaryStage;
 	private BorderPane rootLayout;
