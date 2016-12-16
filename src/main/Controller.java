@@ -64,6 +64,7 @@ public class Controller extends Application {
 	public void showPersonOverview()
 	{
 		person.Controller controller = new person.Controller();
+		controller.setMainApp(this);
 		controller.initLayout();
 		AnchorPane personOverview = controller.getAnchorPane();
 		rootLayout.setCenter(personOverview);

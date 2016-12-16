@@ -50,6 +50,8 @@ public class Controller {
 	private Label birthdayLabel;
 
 	private AnchorPane anchorPane;
+	
+	private main.Controller mainApp;
 
 	public Controller() {
 		// TODO Auto-generated constructor stub
@@ -157,19 +159,53 @@ public class Controller {
 	@FXML
 	private void handleDeletePerson() {
 		int selectedIndex = personTable.getSelectionModel().getSelectedIndex();
-		if(selectedIndex >= 0)
-		{
+		if (selectedIndex >= 0) {
 			personTable.getItems().remove(selectedIndex);
-		}
-		else
-		{
+		} else {
 			Alert alert = new Alert(AlertType.WARNING);
 			alert.setTitle("No Selected");
 			alert.setHeaderText("No Person Selected");
 			alert.setContentText("Please select a person in the table.");
 			alert.showAndWait();
-			
+
 		}
 	}
+	
+	@FXML
+	private void handleEditPerson() {
+    Model selectedPerson = personTable.getSelectionModel().getSelectedItem();
+    if (selectedPerson != null) 
+    {
+      boolean okClicked = showPersonEditDialog(selectedPerson);
+      if (okClicked) 
+      {
+        showPersonDetails(selectedPerson);
+      }
+    } 
+    else 
+    {
+        // Nothing selected.
+      Alert alert = new Alert(AlertType.WARNING);
+      alert.initOwner(mainApp.getPrimaryStage());
+      alert.setTitle("No Selection");
+      alert.setHeaderText("No Person Selected");
+      alert.setContentText("Please select a person in the table.");
+      alert.showAndWait();
+    }
+	}
 
+	public boolean showPersonEditDialog(Model person) 
+	{
+		person.dialog.Controller controller = new person.dialog.Controller();
+		controller.setMainApp(mainApp);
+		controller.initLayout();
+		controller.setPerson(person);
+		controller.show();
+		
+		return controller.isOkClicked();
+	}
+
+	public void setMainApp(main.Controller mainApp) {
+		this.mainApp = mainApp;
+	}
 }
