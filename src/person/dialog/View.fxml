@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="person.dialog.Controller">
+<AnchorPane prefHeight="300.0" prefWidth="500.0" styleClass="background" stylesheets="@../../main/DarkTheme.css" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="person.dialog.Controller">
    <children>
       <GridPane layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="500.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
         <columnConstraints>
@@ -41,7 +41,7 @@
       </GridPane>
       <ButtonBar layoutX="295.0" layoutY="260.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="295.0" AnchorPane.rightAnchor="5.0">
         <buttons>
-          <Button mnemonicParsing="false" onAction="#handleOk" text="OK" />
+          <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOk" text="OK" />
             <Button mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
         </buttons>
       </ButtonBar>
