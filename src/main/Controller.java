@@ -66,12 +66,18 @@ public class Controller extends Application {
 	
 	public void showPersonOverview()
 	{
-		person.Controller controller = new person.Controller();
-		controller.setMainApp(this);
-		controller.initLayout();
-		AnchorPane personOverview = controller.getAnchorPane();
-		rootLayout.setCenter(personOverview);
-		personData = controller.getPersonData();
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(person.Controller.class.getResource("View.fxml"));
+			AnchorPane anchorPane = (AnchorPane) loader.load();
+			person.Controller controller = loader.getController();
+			controller.setMainApp(this);
+			rootLayout.setCenter(anchorPane);
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Stage getPrimaryStage() {

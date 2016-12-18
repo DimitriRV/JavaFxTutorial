@@ -44,19 +44,13 @@ public class Controller {
 	public void setPerson(person.Model person) {
 		this.person = person;
 		
-		try {
-			String x = person.getFirstName();
-			firstNameField.setText(x);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-//		lastNameField.setText(person.getLastName());
-//		streetField.setText(person.getStreet());
-//		postalCodeField.setText(Integer.toString(person.getPostalCode()));
-//		cityField.setText(person.getCity());
-//		birthdayField.setText(DateTimeUtil.format(person.getBirthday()));
-//		birthdayField.setPromptText("dd.mm.yyyy");
+		firstNameField.setText(person.getFirstName());
+		lastNameField.setText(person.getLastName());
+		streetField.setText(person.getStreet());
+		postalCodeField.setText(Integer.toString(person.getPostalCode()));
+		cityField.setText(person.getCity());
+		birthdayField.setText(DateTimeUtil.format(person.getBirthday()));
+		birthdayField.setPromptText("dd.mm.yyyy");
 	}
 
 	public boolean isOkClicked() {
@@ -136,23 +130,15 @@ public class Controller {
 		}
 	}
 	
-	public void initLayout() {
-		try {
-//			 Load the fxml file and create a new stage for the popup dialog.
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Controller.class.getResource("View.fxml"));
-			anchorPane = (AnchorPane) loader.load();
-
-			// Create the dialog Stage.
-			dialogStage = new Stage();
-			dialogStage.setTitle("Edit Person");
-			dialogStage.initModality(Modality.WINDOW_MODAL);
-			dialogStage.initOwner(mainApp.getPrimaryStage());
-			Scene scene = new Scene(anchorPane);
-			dialogStage.setScene(scene);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public void initLayout(AnchorPane pane) 
+	{
+		anchorPane = pane;
+		dialogStage = new Stage();
+		dialogStage.setTitle("Edit Person");
+		dialogStage.initModality(Modality.WINDOW_MODAL);
+		dialogStage.initOwner(mainApp.getPrimaryStage());
+		Scene scene = new Scene(anchorPane);
+		dialogStage.setScene(scene);
 	}
 	
 	public void show()

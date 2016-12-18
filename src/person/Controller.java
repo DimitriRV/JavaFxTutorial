@@ -8,13 +8,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 //import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+
 //import javafx.util.Callback;
 import util.DateTimeUtil;
 
@@ -85,7 +88,7 @@ public class Controller {
 		 */
 		personTable.getSelectionModel().selectedItemProperty()
 				.addListener((observable, oldV, newV) -> showPersonDetails(newV));
-
+		
 		/**
 		 * old style without Lambdas
 		 */
@@ -98,7 +101,10 @@ public class Controller {
 		// showPersonDetails(newValue);
 		// }
 		// });
-
+		
+		
+		personTable.setOnMousePressed(event -> handleTableRowDoublecklicked(event));
+		
 		personData.add(new person.Model("Hans", "Muster"));
 		personData.add(new person.Model("Ruth", "Mueller"));
 		personData.add(new person.Model("Heinz", "Kurz"));
@@ -112,20 +118,13 @@ public class Controller {
 		personTable.setItems(personData);
 	}
 
-	public void initLayout() {
-		try {
-			// Load person overview
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Controller.class.getResource("View.fxml"));
-			anchorPane = (AnchorPane) loader.load();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public AnchorPane getAnchorPane() {
 		return anchorPane;
+	}
+	
+	public void setAnchorPane(AnchorPane pane)
+	{
+		anchorPane = pane;
 	}
 
 	public ObservableList<person.Model> getPersonData() {
@@ -171,6 +170,18 @@ public class Controller {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param event
+	 */
+	private void handleTableRowDoublecklicked(MouseEvent event)
+	{
+		if(event.isPrimaryButtonDown() && event.getClickCount() == 2)
+		{
+			handleEditPerson();
+		}
+	}
+	
 	@FXML
 	private void handleEditPerson() {
     Model selectedPerson = personTable.getSelectionModel().getSelectedItem();
@@ -193,19 +204,42 @@ public class Controller {
       alert.showAndWait();
     }
 	}
+	
+	/**
+	 * Called when the user clicks the new button. Opens a dialog to edit
+	 * details for a new person.
+	 */
+	@FXML
+	private void handleNewPerson() {
+	    Model tempPerson = new Model();
+	    boolean okClicked = showPersonEditDialog(tempPerson);
+	    if (okClicked) {
+	        personData.add(tempPerson);
+	    }
+	}
 
-	public boolean showPersonEditDialog(Model person) 
+	public boolean showPersonEditDialog(Model p) 
 	{
-		person.dialog.Controller controller = new person.dialog.Controller();
-		controller.setMainApp(mainApp);
-		controller.initLayout();
-		controller.setPerson(person);
-		controller.show();
-		
-		return controller.isOkClicked();
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(person.dialog.Controller.class.getResource("View.fxml"));
+			AnchorPane pane = (AnchorPane) loader.load();
+			person.dialog.Controller controller = loader.getController();
+			controller.setMainApp(mainApp);
+			controller.initLayout(pane);
+			controller.setPerson(p);
+			controller.show();
+			return controller.isOkClicked();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+				
+		return false;
 	}
 
 	public void setMainApp(main.Controller mainApp) {
 		this.mainApp = mainApp;
-	}
+	}	
 }
